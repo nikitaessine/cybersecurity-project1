@@ -7,7 +7,14 @@ def get_all_restaurants():
     return result.fetchall()
 
 def search_restaurants(substring):
+    
+    sql = text("SELECT * FROM restaurants WHERE LOWER(name) LIKE '%' || LOWER('" + substring + "') || '%'")
+    
+    '''
+    Flaw no.3 fix
     sql = text("SELECT * FROM restaurants WHERE LOWER(name) LIKE '%' || LOWER(:substring) || '%'")
+    
+    '''
     result = db.session.execute(sql, {"substring":substring})
     filtered_restaurants = result.fetchall()
     print(filtered_restaurants)
