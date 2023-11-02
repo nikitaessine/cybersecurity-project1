@@ -106,8 +106,22 @@ def search():
 
 @app.route("/delete", methods=["POST"])
 def delete():
+
+    '''
+    #Flaw no.2 fix
+
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
+    '''
+
+    '''
+    #Flaw no.1 fix
+
+    username = session.get('username')
+    if not users.admins(username):
+        abort(401)  # Unauthorized access
+
+    '''
     restaurant_id = request.form.get('restaurant_id')
     delete_restaurant(restaurant_id)
     return redirect("/restaurants")
