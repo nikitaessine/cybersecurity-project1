@@ -12,7 +12,7 @@ def create_account(username, password):
 
         hash_value = generate_password_hash(password)
         csrf_token = secrets.token_hex(16)
-
+               
         try:
             sql = text("INSERT INTO users (username, password, admin) VALUES (:username, :password, :admin)")
             db.session.execute(sql, {"username":username, "password":hash_value, "admin":is_admin})
