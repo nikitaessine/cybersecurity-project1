@@ -101,8 +101,15 @@ def craete_account():
 def search():
     substring = request.form.get('name')
     filtered_restaurants = search_restaurants(substring)
-    return render_template('filtered.html', count=len(filtered_restaurants), restaurants=filtered_restaurants)
+
+    html_response = f"<html><body>Count: {len(filtered_restaurants)}<br>Restaurants: {filtered_restaurants}</body></html>"
     
+    return html_response
+
+    '''
+    Flaw no.4 fix
+    return render_template('filtered.html', count=len(filtered_restaurants), restaurants=filtered_restaurants)
+    '''
 
 @app.route("/delete", methods=["POST"])
 def delete():
