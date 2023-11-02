@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/reviews.css">
+    <script>
+        function toggleComments(restaurantId) {
+            var commentsSection = document.getElementById(`comments-${restaurantId}`);
+            var button = document.getElementById(`button-${restaurantId}`);
+            if (commentsSection.style.display === "none") {
+                commentsSection.style.display = "block";
+                button.innerHTML = "Piilota";
+            } else {
+                commentsSection.style.display = "none";
+                button.innerHTML = "Näytä kommentit";
+            }
+        }
+    </script>
+</head>
+<body>
+    <a href="/restaurants">Takaisin</a>
+<form action="/search" method="POST">
+    Hakusana: <input type="text" name="name">
+    <input type="submit" value="Hae">
+</form>
+
+{% for restaurant in restaurants %}
+    <h2>{{ restaurant[1] }}</h2>
+    <p>Kategoria: {{ restaurant[4] }}</p>
+    <p>Osoite: {{ restaurant.address }}</p>
+    <p>Kaupunki: {{ restaurant.city }}</p>
+    <p>Keskiarvo: {{ restaurant.avg_stars|round(2) if restaurant.avg_stars is not none else 0 }}</p>
+    <p>Arvosteluiden määrä: {{ restaurant.review_count }}</p>
+
+    <form action="/add_review" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+        Tähdet:
+        <select name="stars">
+            <option value="1">1
+            <option value="2">2
+            <option value="3">3
+            <option value="4">4
+            <option value="5">5
+        </select>
+        <p>
+        Kommentti:<br>
+        <textarea name="comment" rows="3" cols="40" minlength="1" maxlength="500"></textarea>
+        <p><input type="submit" value="Lähetä">
+        <input type="hidden" name="restaurant_id" value="{{ restaurant.id }}">
+
+        <button id="button-{{ restaurant.id }}" type="button" onclick="toggleComments('{{ restaurant.id }}')">Näytä kommentit</button>
+        <div id="comments-{{ restaurant.id }}" style="display: none">
+            {% for comment in restaurant.comments %}
+                <div class="comment">
+                    <p>{{ comment }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </form>
+
+    <hr>
+{% endfor %}
+
+</body>
+</html>

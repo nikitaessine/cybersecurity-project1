@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/new.css">
+</head>
+<body>
+    <form action="/send" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+        Ravintolan nimi: <br>
+        <textarea name="name" rows="3" cols="40"></textarea>
+        <br>
+        Kategoria:<br>
+        <select name="categories">
+            <option value="Meat">Meat
+            <option value="Vegan">Vegan
+            <option value="Mixed">Mixed
+        </select>
+        <br>
+        Ravintolan osoite: <br>
+        <input type="text" name="address" size="40" required>
+        <br>
+        Kaupunki: <br>
+        <input type="text" name="city" size="40" required>
+        <br><br>
+        <input type="submit" value="Lisää">
+    </form>
+    {% if message %}
+    <div id="flash" class="alert alert-success">
+        {{ message }}
+    </div>  
+    {% endif %}
+    <script> setTimeout(function() {
+        document.getElementById('flash').style.display = 'none';
+      }, 3000);</script>
+    <a href="/restaurants">Takaisin</a>    
+</body>
+</html>
