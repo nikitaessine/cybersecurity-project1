@@ -6,6 +6,18 @@ from restaurants import search_restaurants, delete_restaurant, get_all_restauran
 from reviews import get_reviews, add_review
 import users
 
+'''
+Flaw no.5 fix
+
+from logging import getLogger, ERROR
+
+logger = getLogger('login_activity')
+logger.setLevel(ERROR)
+
+def log_access_control_failure(username):
+    logger.error(f'Access control failure for user: {username}')
+
+'''
 @app.route("/")
 def index():
     return render_template("home.html")
@@ -70,6 +82,28 @@ def login():
     
     else:
         return redirect("/restaurants")
+    
+    '''
+    Flow no.5 fix
+
+    logger.error('Login attempt initiated')
+
+    username = request.form["username"]
+    password = request.form["password"]
+
+    if users.login(username,password) == False:
+        # Logging failed login attempt
+        logger.error(f'Failed login attempt for user: {username}')
+        log_access_control_failure(username)
+
+        flash('Invalid username or password')
+        return redirect('/')
+    
+    else:
+        # Logging successful login
+        logger.error(f'User {username} successfully logged in')
+
+        return redirect("/restaurants")'''
 
 @app.route("/logout")
 def logout():
